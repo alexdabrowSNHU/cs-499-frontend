@@ -27,6 +27,7 @@ const mockMonkeys: Animal[] = Array.from({ length: 10 }, (_, i) => ({
     type: 'monkey',
 }));
 
+// spread the mockDogs and mockMonkeys arrays into a single array
 const mockAnimals = [...mockDogs, ...mockMonkeys];
 
 

@@ -5,19 +5,6 @@ import type { Monkey } from '../types/monkey';
 // We fetch the monkeys from the server and display them in a paginated format
 // It is used in MonkeyPage.tsx in the pages directory
 
-// Mock monkey data
-// This was generated using Copilot for testing purposes
-// This is our "server" data
-// This will not be used in the final version of the code, but is here for testing purposes
-// This generates 30 monkeys with different attributes
-const mockMonkeys: Monkey[] = Array.from({ length: 30 }, (_, i) => ({
-    id: i + 1,
-    name: `Monkey ${i + 1}`,
-    species: ['Capuchin', 'Guenon', 'Tamarin', 'Marmoset'][i % 4],
-    trainingStatus: ['Trained', 'Phase 1', 'Phase 2'][i % 3],
-    acquisitionCountry: ['Brazil', 'Colombia'][i % 2],
-    reserved: i % 4 === 0,
-}));
 
 // MonkeyList component
 // MonkeyList display the list of monkeys after fetching them from the server and displays them in a paginated format
@@ -33,40 +20,34 @@ const MonkeyList: React.FC = () => {
     // pageSize is how many monkeys are displayed on each page
     const pageSize = 10;
 
-    /*
+    
     // This is for fetching the monkeys from the server - it's currently using the local spring boot server for testing purposes
     useEffect(() => {
         // Fetch monkeys from the server
-        const fetchMonkeys = async () =>
-        // Attempt to fetch the data from the server
-        try {
-            // Response from the server
-            const response = await fetch('http://localhost:8080/api/v1/animals/monkeys');
-            // If the response is not ok, throw an error
-            if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-            // Parse the response as JSON
-            const data: Monkey[] = await response.json();
-            // Set the monkeys state with the data from the server
-            setMonkeys(data);
-            // Catch any errors that occur during the fetch
-        } catch (e: any) {
-            // Set the error state with the error message
-            setError(e.message);
-        } finally {
-            // Update the loading state to false
+        const fetchMonkeys = async () => {
+            // Attempt to fetch the data from the server
+            try {
+                // Response from the server
+                const response = await fetch('https://cs-499-api-aehve5e4afg0bsh8.centralus-01.azurewebsites.net/api/v1/animals/monkeys');
+                // If the response is not ok, throw an error
+                if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+                // Parse the response as JSON
+                const data: Monkey[] = await response.json();
+                // Set the monkeys state with the data from the server
+                setMonkeys(data);
+                // Catch any errors that occur during the fetch
+            } catch (e: any) {
+                // Set the error state with the error message
+                setError(e.message);
+            } finally {
+                // Update the loading state to false
                 setLoading(false);
             }
         };
-    // Call the fetchMonkeys function
+        // Call the fetchMonkeys function
         fetchMonkeys();
     }, []);
-    */
 
-    // Simulate fetching data
-    useEffect(() => {
-            setMonkeys(mockMonkeys);
-            setLoading(false);
-    }, []);
 
     // These are the constants for pagination
     // The goal of this pagination is to display a maximum of 10 monkeys on each page

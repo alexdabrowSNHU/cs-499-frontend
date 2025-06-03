@@ -5,20 +5,6 @@ import type { Dog } from '../types/dog';
 // We fetch the dogs from the server and display them in a paginated format
 // It is used in DogPage.tsx in the pages directory
 
-// Mock dog data
-// This was generated using Copilot for testing purposes
-// This is our "server" data
-// This will not be used in the final version of the code, but is here for testing purposes
-// This generates 30 dogs with different attributes
-const mockDogs: Dog[] = Array.from({ length: 30 }, (_, i) => ({
-    id: i + 1,
-    name: `Dog ${i + 1}`,
-    breed: ['Labrador', 'Beagle', 'Poodle', 'Bulldog'][i % 4],
-    trainingStatus: ['Trained', 'Phase 1', 'Phase 2'][i % 3],
-    acquisitionCountry: ['USA', 'Canada', 'Mexico', 'UK'][i % 4],
-    reserved: i % 3 === 0,
-}));
-
 // DogList component
 // Doglist display the list of dogs after fetching them from the server and displays them in a paginated format
 const DogList: React.FC = () => {
@@ -28,46 +14,53 @@ const DogList: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     // error is a string that contains a message, setError is a function to update the state of error
     const [error, setError] = useState<string | null>(null);
-    // page is a number that indicates the current page, setPage is a function to update the state of page - it's default value is 1
+    // page is a number that indicates the current page, setPage is a function to update the state of page - its default value is 1
     const [page, setPage] = useState<number>(1);
     // pageSize is how many dogs are displayed on each page
     const pageSize = 10;
+    // Sort method
+    const [sortMethod, setSortMethod] = useState<string>('');
+    // How long the sort takes in milliseconds
+    const [sortDuration, setSortDuration] = useState<number | null>(null);
 
 
-    /*
-    // This is for fetching the dogs from the server - it's currently using the local spring boot server for testing purposes
+
+
+    // This is for fetching the dogs from the server 
     useEffect(() => {
         // Fetch dogs from the server
-        const fetchDogs = async () =>
-        // Attempt to fetch the data from the server
-        try {
-            // Response from the server
-            const response = await fetch('http://localhost:8080/api/v1/animals/dogs');
-            // If the response is not ok, throw an error
-            if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-            // Parse the response as JSON
-            const data: Dog[] = await response.json();
-            // Set the dogs state with the data from the server
-            setDogs(data);
-            // Catch any errors that occur during the fetch
-        } catch (e: any) {
-            // Set the error state with the error message
-            setError(e.message);
-        } finally {
-            // Update the loading state to false
+        const fetchDogs = async () => {
+            // Attempt to fetch the data from the server
+            try {
+                // Response from the server
+                const response = await fetch(
+                    // if sortMethod is set, append it to the URL as a query parameter
+                    `https://cs-499-api-aehve5e4afg0bsh8.centralus-01.azurewebsites.net/api/v1/animals/dogs${sortMethod ? `?sort=${sortMethod}` : ''}`
+                );
+
+                // If the response is not ok, throw an error
+                if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+                // Parse the response as JSON
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setDogs(data); // backend returned the array directly
+                    setSortDuration(null);
+                } else {
+                    setDogs(data.dogs ?? []); // backend returned { dogs: [...], sortDuration: X }
+                    setSortDuration(data.sortDuration ?? null);
+                }
+
+            } catch (e: any) {
+                // Set the error state with the error message
+                setError(e.message);
+            } finally {
+                // Update the loading state to false
                 setLoading(false);
             }
         };
-    // Call the fetchDogs function
+        // Call the fetchDogs function
         fetchDogs();
-    }, []);
-    */
-
-    // Simulate fetching data
-    useEffect(() => {
-        setDogs(mockDogs);
-        setLoading(false);;
-    }, []);
+    }, [sortMethod]); // Re-fetch when sortMethod changes
 
     // These are the constants for pagination
     // The goal of this pagination is to display a maximum of 10 dogs on each page
@@ -115,31 +108,62 @@ const DogList: React.FC = () => {
                             ))}
                         </ul>
                     </div>
+                    <div className="mt-8 grid grid-cols-3 gap-4 items-center max-w-4xl mx-auto">
+                        {/* Left Sort Button */}
+                        <div className="flex justify-start">
+                            <button
+                                onClick={() => {
+                                    setSortMethod('insertion');
+                                    setPage(1);
+                                    setLoading(true);
+                                }}
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded min-w-[220px]"
+                            >
+                                Sort by name - insertion sort
+                            </button>
+                        </div>
 
-                    {/* Pagination controls at the bottom of the page */}
-                    <div className="mt-4 flex items-center justify-between max-w-xs mx-auto">
-                        {/* Previous button */}
-                        {/* It decreases the page number by 1 and ensures the min page number is 1 */}
-                        {/* When the page number is one, we disable the button */}
-                        <button
-                            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                            disabled={page === 1}
-                            className="bg-gray-700 px-4 py-2 rounded disabled:opacity-50 min-w-[90px] text-center"
-                        >
-                            Previous
-                        </button>
-                        <span className="text-gray-300 text-sm">Page {page}</span>
-                        {/* Next button */}
-                        {/* It increases the page number by 1 and ensures the max page number is the total number of dogs divided by the page size */}
-                        {/* When the endIndex is greater than or equal to the total number of dogs, we disable the button */}
-                        <button
-                            onClick={() => setPage((prev) => (endIndex < dogs.length ? prev + 1 : prev))}
-                            disabled={endIndex >= dogs.length}
-                            className="bg-gray-700 px-4 py-2 rounded disabled:opacity-50 min-w-[90px] text-center"
-                        >
-                            Next
-                        </button>
+                        {/* Center Pagination Controls */}
+                        <div className="flex items-center justify-center gap-4">
+                            <button
+                                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                                disabled={page === 1}
+                                className="bg-gray-700 px-4 py-2 rounded disabled:opacity-50 min-w-[90px] text-center"
+                            >
+                                Previous
+                            </button>
+                            <span className="text-gray-300 text-sm">Page {page}</span>
+                            <button
+                                onClick={() => setPage((prev) => (endIndex < dogs.length ? prev + 1 : prev))}
+                                disabled={endIndex >= dogs.length}
+                                className="bg-gray-700 px-4 py-2 rounded disabled:opacity-50 min-w-[90px] text-center"
+                            >
+                                Next
+                            </button>
+                        </div>
+
+                        {/* Right Sort Button */}
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => {
+                                    setSortMethod('java');
+                                    setPage(1);
+                                    setLoading(true);
+                                }}
+                                className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded min-w-[220px]"
+                            >
+                                Sort by name - java sort()
+                            </button>
+                        </div>
                     </div>
+                    <div className="text-center mt-4">
+                        {sortDuration !== null && (
+                            <p className="text-sm text-gray-400">
+                                Sort completed in <span className="font-semibold text-teal-400">{sortDuration}</span> ms.
+                            </p>
+                        )}
+                    </div>
+
                 </>
             )}
         </div>

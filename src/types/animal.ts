@@ -7,8 +7,6 @@ type Animal = {
     weight?: string;
     aquisitionDate?: string;
     inServiceCountry?: string;
-    breed?: string;
-    species?: string;
     trainingStatus?: string;
     reserved?: boolean;
     acquisitionCountry?: string;

@@ -4,6 +4,7 @@ import DogPage from '../pages/DogPage';
 import ReservePage from '../pages/ReservePage';
 import MonkeyPage from '../pages/MonkeyPage';
 import AnimalReserveForm from '../pages/AnimalReserveForm';
+import AddDataPage from '../pages/AddDataPage';
 
 // We are using react router for routing
 // We are defining all the routes here
@@ -16,6 +17,7 @@ export default function AppRoutes() {
       <Route path="/monkeys" element={<MonkeyPage />} />
       <Route path="/reserve" element={<ReservePage />} />
       <Route path="/reserve/:id" element={<AnimalReserveForm />} />
+      <Route path="/addData" element={<AddDataPage />} />
     </Routes>
   );
 }

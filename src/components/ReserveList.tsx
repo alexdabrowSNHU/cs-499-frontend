@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import type {Animal} from '../types/animal';
+import type {Dog} from '../types/dog';
+import type {Monkey} from '../types/monkey';
 
 // ReserveList component
 // This component displays a list of animals that are not reserved.
@@ -40,9 +42,9 @@ const ReserveList: React.FC<ReserveListProps> = ({ results, hasSearched }) => {
                         </h3>
                         {/* Display the animal's breed for dogs or species for monkeys) */}
                         {animal.type === 'dog' ? (
-                            <p className="text-sm text-gray-300">Breed: {animal.breed}</p>
+                            <p className="text-sm text-gray-300">Breed: {(animal as Dog).breed}</p>
                         ) : (
-                            <p className="text-sm text-gray-300">Species: {animal.species}</p>
+                            <p className="text-sm text-gray-300">Species: {(animal as Monkey).species}</p>
                         )}
                         {/* Display the animal's training status and acquisition country */}
                         <p className="text-sm text-gray-300">Training Status: {animal.trainingStatus}</p>
