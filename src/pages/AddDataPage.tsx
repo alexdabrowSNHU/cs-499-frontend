@@ -65,9 +65,9 @@ function AddDataPage() {
                                 const file = fileInput.files?.[0];
                                 // If a file is selected, call handleCSV with the file and a callback function onValidData that will give us the valid data
                                 if (file) {
+                                    // Call handleCSV function to parse and validate the CSV file
                                     handleCSV({
-                                        file: file,
-                                        onValidData: async (data) => {
+                                        file: file, onValidData: async (data) => {
                                             try {
                                                 const response = await fetch('https://cs-499-api-aehve5e4afg0bsh8.centralus-01.azurewebsites.net/api/v1/animals/batch-upload', {
                                                     method: 'POST',
@@ -80,7 +80,7 @@ function AddDataPage() {
                                                 if (!response.ok) {
                                                     throw new Error(`HTTP error! status: ${response.status}`);
                                                 }
-
+                                                // Parse the response as JSON
                                                 const result = await response.json();
                                                 console.log('Upload successful:', result);
                                                 alert('Data uploaded successfully!');

@@ -11,17 +11,17 @@ type handleCSVProps = {
 const handleCSV = ({ file, onValidData }: handleCSVProps) => {
     // PapaParse is used to parse the CSV file
     Papa.parse(file, {
-        // Configurations for parsing the CSV
-        // The header option is set to true to treat the first row as headers that map
+        // Config for parsing the CSV
+        // The header option is set to true to read the first row as headers that map
         header: true,
         skipEmptyLines: true,
         // Callback function when parsing is complete
         // This function will be called with the parsed results for further processing
         // ParseResult contains the parsed data, and we can access it through results.data
         complete: (results: ParseResult<any>) => {
+            
             // Store the raw data from the CSV
             const rawData = results.data;
-
             // Initialzing an empty array store valid and invalid rows -
             const validData: any[] = [];
             // Initializing an empty array to store invalid rows with their index, an array of errors, and the row data
