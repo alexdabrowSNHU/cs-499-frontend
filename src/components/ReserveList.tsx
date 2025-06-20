@@ -33,13 +33,14 @@ const ReserveList: React.FC<ReserveListProps> = ({ results, hasSearched }) => {
                     {/* The link takes the user to the reservation page for that animal */}
                     {/* The animal's name, breed for dogs, species for monkeys, training status, and acquisition country are displayed */}
                     <Link
-                        to={`/reserve/${animal.id}`}
+                        to={`/reserve/${animal.type}/${animal.id}`}
                         className="block p-4 border border-gray-600 rounded bg-slate-800 hover:bg-slate-700 transition text-white"
                     >
                         <h3 className="text-lg font-semibold text-teal-400">
                             {/* Display the animal's name and breed*/}
                             {animal.name} ({animal.type ? (animal.type.charAt(0).toUpperCase() + animal.type.slice(1)) : 'Error - type not found'})
                         </h3>
+                        <p className="text-xs text-gray-400">ID: {animal.id}</p>
                         {/* Display the animal's breed for dogs or species for monkeys) */}
                         {animal.type === 'dog' ? (
                             <p className="text-sm text-gray-300">Breed: {(animal as Dog).breed}</p>

@@ -108,7 +108,8 @@ const DogList: React.FC = () => {
                             ))}
                         </ul>
                     </div>
-                    <div className="mt-8 grid grid-cols-3 gap-4 items-center max-w-4xl mx-auto">
+                    <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 flex-wrap max-w-4xl mx-auto">
+
                         {/* Left Sort Button */}
                         <div className="flex justify-start">
                             <button

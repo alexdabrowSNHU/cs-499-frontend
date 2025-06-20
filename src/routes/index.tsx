@@ -16,7 +16,7 @@ export default function AppRoutes() {
       <Route path="/dogs" element={<DogPage />} />
       <Route path="/monkeys" element={<MonkeyPage />} />
       <Route path="/reserve" element={<ReservePage />} />
-      <Route path="/reserve/:id" element={<AnimalReserveForm />} />
+      <Route path="/reserve/:type/:id" element={<AnimalReserveForm />} />
       <Route path="/addData" element={<AddDataPage />} />
     </Routes>
   );
