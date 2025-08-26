@@ -74,7 +74,16 @@ const DogList: React.FC = () => {
     const currentDogs = dogs.slice(startIndex, endIndex);
 
     // Message to display while loading
-    if (loading) return <p className="text-center p-4">Loading dogs...</p>;
+    if (loading) {
+        return (
+            <div className="text-center p-4">
+                <p>Currently loading data.</p>
+                <p>
+                    Due to free tier limitations, cold starts may cause initial loads to take up to a minute.
+                </p>
+            </div>
+        );
+    }
     // Message to display if there was an error fetching the dogs 
     if (error) return <p className="text-center text-red-400 p-4">Error fetching dogs: {error}</p>;
 
