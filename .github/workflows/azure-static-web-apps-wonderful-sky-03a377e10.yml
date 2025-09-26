@@ -45,6 +45,7 @@ jobs:
           action: "upload"
           app_location: "/"     # where package.json lives
           output_location: "dist" # folder created by Vite
+          app_artifact_location: "dist"
           api_location: ""      # no backend in this project
 
   close_pull_request_job:
