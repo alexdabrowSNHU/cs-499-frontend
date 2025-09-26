@@ -45,6 +45,7 @@ jobs:
           action: "upload"
           app_location: "/"     # where package.json lives
           api_location: ""      # no backend in this project
+          app_artifact_location: "dist"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
